@@ -30,6 +30,18 @@ jobs:
     - name: Build with Maven
       run: cd video && mvn -B package --file pom.xml
 
+    - name: Write SSH keys
+      run: |
+        install -m 600 -D /dev/null ~/.ssh/id_rsa
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.SERVER_IP }} > ~/.ssh/known_hosts
+
+    - name: Copy jar file to server
+      run: |
+        rsync -avz -e 'ssh -o StrictHostKeyChecking=no' $GITHUB_WORKSPACE/video/target/video-0.0.1-SNAPSHOT.jar ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SSH_USER }}/video-0.0.1-SNAPSHOT.jar
+        echo "Jar file copied to server"
+
+
 #    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
 #    - name: Update dependency graph
 #      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
