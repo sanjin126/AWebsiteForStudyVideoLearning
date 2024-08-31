@@ -1,0 +1,40 @@
+.container {
+    max-width: 2540px;
+    min-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    box-sizing: content-box;
+    position: relative;
+}
+
+#video-player {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.player-wrapper {
+    width: 60%;
+    height: 422px;
+}
+
+.section-wrapper {
+    width: 40%;
+    height: 422px;
+}
+
+.base-video-sections {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.video-sections-item {
+    width: 100%;
+    border: #77107c 1px solid;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}

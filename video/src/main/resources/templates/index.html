@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>赵礼显高二暑假班</title>
-    </head>
-    <body>
-    <h1>讲义：<a th:href="${lecturePath}">点开查看</a> </h1>
-    <h1>笔记：<a th:href="${notePath}">点开查看</a> </h1>
-        <div id="container">
+<head>
+    <meta charset="UTF-8">
+    <title>赵礼显高二暑假班</title>
+    <link rel="stylesheet" href="/static/index.css">
+</head>
+<body>
+<h1>讲义：<a th:href="${lecturePath}">点开查看</a> </h1>
+<h1>笔记：<a th:href="${notePath}">点开查看</a> </h1>
+    <div id="title-container">
+    </div>
+    <div class="container">
+        <div id="video-container" class="player-wrapper">
         </div>
+    <div class="section-wrapper">
+        <div id="sections-container" class="base-video-sections">
+        </div>
+    </div>
 
-    </body>
-    <script src="/static/index.js"></script>
+</div>
+
+</body>
+<script src="/static/index.js"></script>
 </html>

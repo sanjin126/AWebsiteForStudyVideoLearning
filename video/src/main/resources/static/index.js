@@ -1,24 +1,54 @@
+let videoList = []
+
 // 将获取到的video标签逐个展示到<div id="container">中
 function displayVideoCard() {
-    let list = api_getVideoList("math");
+    videoList = api_getVideoList("math");
     //console.log("list:"+list)
-    let container = document.getElementById("container");
-    for (const video of list) {
-        let title = video["title"];
-        let url = video["url"];
+    let container = document.getElementById("video-container");
+    let titleContainer = document.getElementById("title-container");
+    // for (const video of videoList) {
+    if (videoList.length === 0) {
         let h2 = document.createElement("h2");
-        h2.innerText = title;
-        let videoN = document.createElement("video");
-        videoN.height = 422
-        videoN.controls = true
-        videoN.preload = 'none'
-        videoN.src = url
+        h2.innerText = "No video found";
         container.appendChild(h2);
-        container.appendChild(videoN);
-        //console.log(`${title} ${url}`)
+        return
     }
-    if (container.firstElementChild != null) {
-        container.firstElementChild.nextSibling.preload = 'metadata'
+    const video = videoList[0];
+    let title = video["title"];
+    let url = video["url"];
+    let h2 = document.createElement("h2");
+    h2.innerText = title;
+    h2.id = "video-title"
+    let videoN = document.createElement("video");
+    videoN.height = 422
+    videoN.controls = true
+    // videoN.preload = 'none'
+    videoN.src = url
+    videoN.id = "video-player"
+    titleContainer.appendChild(h2);
+    container.appendChild(videoN);
+    //console.log(`${title} ${url}`)
+    // }
+    // if (container.firstElementChild != null) {
+    //     container.firstElementChild.nextSibling.preload = 'metadata'
+    // }
+}
+
+function displayVideoSections() {
+    let container = document.getElementById("sections-container");
+    for (const video of videoList) {
+
+        let btn = document.createElement("button");
+        btn.innerText = video["title"];
+        btn.classList.add("video-sections-item");
+        btn.onclick = () => {
+            let h2 = document.getElementById("video-title");
+            let videoN = document.getElementById("video-player");
+            h2.innerText = video["title"];
+            videoN.src = video["url"];
+        }
+
+        container.appendChild(btn);
     }
 }
 
@@ -33,5 +63,6 @@ function api_getVideoList(subject) {
 }
 
 window.onload = () => {
-    displayVideoCard();
+    displayVideoCard()
+    displayVideoSections()
 }
