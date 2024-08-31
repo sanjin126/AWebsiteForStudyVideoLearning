@@ -23,8 +23,17 @@ public class UserController {
     }
 
     @GetMapping("directory/{subject}")
-    public String directoryPage(Model model) {
-        model.addAttribute("lectureList", VideoApplication.mathLectures);
+    public String directoryPage(Model model, @PathVariable String subject) {
+        switch (subject) {
+            case "math":
+                model.addAttribute("lectureList", VideoApplication.mathLectures);
+                break;
+            case "physics":
+
+                break;
+            default:
+                assert false;
+        }
         model.addAttribute("jsPath",
                 PathUtils.getResourcePath(VideoApplication.resourceDir.toString(),
                         VideoApplication.resourceDir.resolve("directory.js").toString()));

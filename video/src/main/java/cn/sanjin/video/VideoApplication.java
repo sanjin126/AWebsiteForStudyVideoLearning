@@ -4,25 +4,37 @@ import cn.sanjin.video.common.entity.Lecture;
 import cn.sanjin.video.common.entity.Video;
 import cn.sanjin.video.common.entity.Videos;
 import cn.sanjin.video.common.utils.PathUtils;
+import cn.sanjin.video.user.config.ResourceConfig;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.io.UrlResource;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 @SpringBootApplication
 public class VideoApplication {
+
+	static Logger log = Logger.getLogger(VideoApplication.class.getName());
+
+	@Autowired
+	private ResourceConfig resourceConfig;
 
 	public static Videos mathVideos = null;
 
 	public static Videos physicsVideos = null;
 
-	public static List<Lecture> mathLectures = new ArrayList<>();
+	public static List<Lecture> mathLectures;
 
 	public static Path resourceDir = Paths.get("C:\\Users\\10326\\sanjin-file\\my_project\\1.video-player\\frontend");
 	public static Path videosDir = resourceDir.resolve("暑假班");
@@ -31,19 +43,72 @@ public class VideoApplication {
 	public static Path lecturesDir = resourceDir.resolve("暑假班").resolve("讲义");
 	public static Path homeworkDir = resourceDir.resolve("暑假班").resolve("课后作业");
 
+	public void updateAfterResourceDirChange() {
+		videosDir = resourceDir.resolve("暑假班");
+		notesDir = resourceDir.resolve("暑假班").resolve("笔记");
+		lecturesDir = resourceDir.resolve("暑假班").resolve("讲义");
+		homeworkDir = resourceDir.resolve("暑假班").resolve("课后作业");
+		initVideos();
+		initLectures();
+
+		try {
+			resourceConfig.pathResourceResolver.setAllowedLocations(
+					new UrlResource("file:"+ VideoApplication.resourceDir.toAbsolutePath()+File.separator)
+			);
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
+
+//		Field registrations = null;
+//		try {
+//			registrations = resourceConfig.registry.getClass().getDeclaredField("registrations");
+//		} catch (NoSuchFieldException e) {
+//			throw new RuntimeException(e);
+//		}
+//		registrations.setAccessible(true);
+//		try {
+//			((List<ResourceHandlerRegistration>) registrations.get(resourceConfig.registry))
+//					.stream().forEach(
+//							r->{
+//								r.addResourceLocations("file:"+ VideoApplication.resourceDir.toAbsolutePath()+File.separator);
+//							}
+//					);
+//		} catch (IllegalAccessException e) {
+//			throw new RuntimeException(e);
+//		}
+
+	}
+
+
+
 
 	public static void main(String[] args) {
+		if (args.length == 1) {
+			String resourcePath = args[0];
+			resourceDir = Paths.get(resourcePath);
+			log.info("before:-----sanjin----resourceDir:"+resourceDir);
+		}
 		SpringApplication.run(VideoApplication.class, args);
 	}
 
 	@PostConstruct
-	public void init() {
+	public static void init() {
+		log.info("-----sanjin----init videos and lectures");
+		log.info("-----sanjin----resourceDir:"+resourceDir);
+		log.info("-----sanjin----videosDir:"+videosDir);
+		log.info("-----sanjin----notesDir:"+notesDir);
+		log.info("-----sanjin----lecturesDir:"+lecturesDir);
+		log.info("-----sanjin----homeworkDir:"+homeworkDir);
+		videosDir = resourceDir.resolve("暑假班");
+		notesDir = resourceDir.resolve("暑假班").resolve("笔记");
+		lecturesDir = resourceDir.resolve("暑假班").resolve("讲义");
+		homeworkDir = resourceDir.resolve("暑假班").resolve("课后作业");
 		initVideos();
 
 		initLectures();
 	}
 
-	private static void initVideos() {
+	public static void initVideos() {
 		mathVideos = new Videos();
 		mathVideos.list = new ArrayList<>();
 		if (videosDir.toFile().exists() && videosDir.toFile().isDirectory()) {
@@ -55,13 +120,17 @@ public class VideoApplication {
 								PathUtils.getResourcePath(resourceDir.toString(), absolutePath)));
 					}
 			);
+
 		} else {
-			assert false;
+			log.info("sanjin------videosDir not exists");
+			return;
 		}
+		log.info("sanjin------length:"+videosDir.toFile().listFiles(File::isFile).length);
 		mathVideos.list.sort(Video::compareTo);
 	}
 
-	public void initLectures() {
+	public static void initLectures() {
+		mathLectures = new ArrayList<>();
 		if (lecturesDir.toFile().exists() && lecturesDir.toFile().isDirectory()) {
 			Arrays.stream(lecturesDir.toFile().listFiles(File::isFile)).forEach(
 					file -> {
@@ -72,7 +141,8 @@ public class VideoApplication {
 					}
 			);
 		} else {
-			assert false;
+			log.info("sanjin------lecturesDir not exists");
+			return;
 		}
 	}
 }

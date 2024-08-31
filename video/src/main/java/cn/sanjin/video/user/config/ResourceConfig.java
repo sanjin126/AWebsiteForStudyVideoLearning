@@ -1,5 +1,6 @@
 package cn.sanjin.video.user.config;
 
+import cn.sanjin.video.VideoApplication;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.AbstractResource;
@@ -17,17 +18,23 @@ import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
-@Configuration
+@Configuration("resourceConfig")
 public class ResourceConfig implements WebMvcConfigurer {
+    Logger log = Logger.getLogger(ResourceConfig.class.getName());
+
+    public ResourceHandlerRegistry registry;
+    public PathResourceResolver pathResourceResolver = new PathResourceResolver();
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        this.registry = registry;
         System.out.println("addResourceHandlers");
         /**
          * https://stackoverflow.com/questions/21123437/how-do-i-use-spring-boot-to-serve-static-content-located-in-dropbox-folder
          */
         registry.addResourceHandler("/resource/**")
-                .addResourceLocations("file:C:\\Users\\10326\\sanjin-file\\my_project\\1.video-player\\frontend\\")
+                .addResourceLocations("file:"+ VideoApplication.resourceDir.toAbsolutePath()+File.separator)
                 .resourceChain(true)
 //                .addResolver(new AbstractResourceResolver() {
 //                    @Override
@@ -82,8 +89,11 @@ public class ResourceConfig implements WebMvcConfigurer {
 //                        return resourceUrlPath;
 //                    }
 //                })
-                .addResolver(new PathResourceResolver())
-        ;
+                .addResolver(pathResourceResolver);
+                log.info("file:"+ VideoApplication.resourceDir.toAbsolutePath()+File.separator);
+
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
     }
 
 }

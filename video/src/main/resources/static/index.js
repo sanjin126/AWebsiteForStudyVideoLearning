@@ -11,7 +11,7 @@ function displayVideoCard() {
         let videoN = document.createElement("video");
         videoN.height = 422
         videoN.controls = true
-        // videoN.preload = 'none'
+        videoN.preload = 'none'
         videoN.src = url
         container.appendChild(h2);
         container.appendChild(videoN);
@@ -26,7 +26,7 @@ function displayVideoCard() {
 
 function api_getVideoList(subject) {
     let api = new XMLHttpRequest();
-    api.open("GET", "http://127.0.0.1:8080/user/video/"+subject, false);
+    api.open("GET", "http://47.97.29.190:8080/user/video/"+subject, false);
     api.send();
     console.log(api.responseText);
     return JSON.parse(api.responseText);

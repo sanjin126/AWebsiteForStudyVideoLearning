@@ -12,7 +12,7 @@
 	<artifactId>video</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>video</name>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<description>A website to study</description>
 	<url/>
 	<licenses>
