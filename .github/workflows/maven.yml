@@ -40,6 +40,7 @@ jobs:
       run: |
         rsync -avz -e 'ssh -o StrictHostKeyChecking=no' $GITHUB_WORKSPACE/video/target/video-0.0.1-SNAPSHOT.jar ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SSH_USER }}/video-0.0.1-SNAPSHOT.jar
         echo "Jar file copied to server"
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cd ~ && ./start_jar.sh"
 
 
 #    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
