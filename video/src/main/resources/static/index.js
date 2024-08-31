@@ -22,7 +22,7 @@ function displayVideoCard() {
     let videoN = document.createElement("video");
     videoN.height = 422
     videoN.controls = true
-    // videoN.preload = 'none'
+    videoN.preload = 'metadata'
     videoN.src = url
     videoN.id = "video-player"
     titleContainer.appendChild(h2);
@@ -37,7 +37,6 @@ function displayVideoCard() {
 function displayVideoSections() {
     let container = document.getElementById("sections-container");
     for (const video of videoList) {
-
         let btn = document.createElement("button");
         btn.innerText = video["title"];
         btn.classList.add("video-sections-item");
