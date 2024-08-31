@@ -22,6 +22,13 @@ public class AdminController {
                 .status(200).build();
     }
 
+    /**
+     * 错误的实现，
+     * 因为虽然修改了resourceDir，但是没有ResourceConfig中的pathResourceResolver的allowedLocations，
+     * 或者更确切的定位 ResourceHttpRequestHandler 的 resourceLocations
+     * @param resourceDir
+     * @return
+     */
     @PostMapping("/resourceDir")
     public Result<String> setResourceDir(@RequestParam String resourceDir) {
         Path resourcePath = Path.of(resourceDir);

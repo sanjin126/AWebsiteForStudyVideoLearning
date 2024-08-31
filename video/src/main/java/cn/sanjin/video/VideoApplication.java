@@ -1,6 +1,7 @@
 package cn.sanjin.video;
 
 import cn.sanjin.video.common.entity.Lecture;
+import cn.sanjin.video.common.entity.Note;
 import cn.sanjin.video.common.entity.Video;
 import cn.sanjin.video.common.entity.Videos;
 import cn.sanjin.video.common.utils.PathUtils;
@@ -35,6 +36,7 @@ public class VideoApplication {
 	public static Videos physicsVideos = null;
 
 	public static List<Lecture> mathLectures;
+	public static List<Note> mathNotes = null;
 
 	public static Path resourceDir = Paths.get("C:\\Users\\10326\\sanjin-file\\my_project\\1.video-player\\frontend");
 	public static Path videosDir = resourceDir.resolve("暑假班");
@@ -43,6 +45,7 @@ public class VideoApplication {
 	public static Path lecturesDir = resourceDir.resolve("暑假班").resolve("讲义");
 	public static Path homeworkDir = resourceDir.resolve("暑假班").resolve("课后作业");
 
+	@Deprecated
 	public void updateAfterResourceDirChange() {
 		videosDir = resourceDir.resolve("暑假班");
 		notesDir = resourceDir.resolve("暑假班").resolve("笔记");
@@ -106,6 +109,8 @@ public class VideoApplication {
 		initVideos();
 
 		initLectures();
+
+		initNotes();
 	}
 
 	public static void initVideos() {
@@ -135,13 +140,30 @@ public class VideoApplication {
 			Arrays.stream(lecturesDir.toFile().listFiles(File::isFile)).forEach(
 					file -> {
 						String name = file.getName().substring(0, file.getName().indexOf(".pdf")); // 删除后缀名
-						String absolutePath = file.getAbsolutePath().toString();
+						String absolutePath = file.getAbsolutePath();
 						mathLectures.add(new Lecture(name,
 								PathUtils.getResourcePath(resourceDir.toString(), absolutePath)));
 					}
 			);
 		} else {
 			log.info("sanjin------lecturesDir not exists");
+			return;
+		}
+	}
+
+	public static void initNotes() {
+		mathNotes = new ArrayList<>();
+		if (notesDir.toFile().exists() && notesDir.toFile().isDirectory()) {
+			Arrays.stream(notesDir.toFile().listFiles(File::isFile)).forEach(
+					file -> {
+						String name = file.getName().substring(0, file.getName().indexOf(".pdf")); // 删除后缀名
+						String absolutePath = file.getAbsolutePath();
+						mathNotes.add(new Note(name,
+								PathUtils.getResourcePath(resourceDir.toString(), absolutePath)));
+					}
+			);
+		} else {
+			log.info("sanjin------notesDir not exists");
 			return;
 		}
 	}

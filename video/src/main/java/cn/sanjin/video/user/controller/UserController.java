@@ -15,18 +15,28 @@ public class UserController {
 
     @GetMapping()
     public String indexPage(Model model) {
-        model.addAttribute("lecturePath", "directory/math");
+        model.addAttribute("lecturePath", "directory/math/lecture");
+        model.addAttribute("notePath", "directory/math/note");
         model.addAttribute("jsPath",
                 PathUtils.getResourcePath(VideoApplication.resourceDir.toString(),
                         VideoApplication.resourceDir.resolve("index.js").toString()));
         return "index";
     }
 
-    @GetMapping("directory/{subject}")
-    public String directoryPage(Model model, @PathVariable String subject) {
+    @GetMapping("directory/{subject}/{type}")
+    public String directoryPage(Model model, @PathVariable String subject, @PathVariable String type) {
         switch (subject) {
             case "math":
-                model.addAttribute("lectureList", VideoApplication.mathLectures);
+                switch (type) {
+                    case "lecture":
+                        model.addAttribute("fileList", VideoApplication.mathLectures);
+                        break;
+                    case "note":
+                        model.addAttribute("fileList", VideoApplication.mathNotes);
+                        break;
+                    default:
+                        assert false;
+                }
                 break;
             case "physics":
 

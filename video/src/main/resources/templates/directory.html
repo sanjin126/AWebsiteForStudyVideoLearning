@@ -6,8 +6,8 @@
     <title th:value="${title}"></title>
 </head>
 <body>
-    <p th:each="lecture : ${lectureList}">
-        <a th:href="${lecture.url}" th:text="${lecture.title}"></a>
+    <p th:each="file : ${fileList}">
+        <a th:href="${file.url}" th:text="${file.title}"></a>
     </p>
 </body>
 </html>
