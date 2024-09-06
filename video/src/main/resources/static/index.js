@@ -36,13 +36,21 @@ function displayVideoCard() {
 
 function displayVideoSections() {
     let container = document.getElementById("sections-container");
+    let selected;
+
     for (const video of videoList) {
         let btn = document.createElement("button");
         btn.innerText = video["title"];
         btn.classList.add("video-sections-item");
+        let selected = null
         btn.onclick = () => {
             let h2 = document.getElementById("video-title");
             let videoN = document.getElementById("video-player");
+            let currentSelected = document.querySelector(".video-sections-item-selected")
+            if (currentSelected != null) {
+                currentSelected.classList.remove('video-sections-item-selected')
+            }
+            btn.classList.add("video-sections-item-selected")
             h2.innerText = video["title"];
             videoN.src = video["url"];
         }
