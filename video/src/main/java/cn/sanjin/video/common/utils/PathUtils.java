@@ -31,9 +31,9 @@ public class PathUtils {
         return sb.toString();
     }
 
-    public static String getResourcePath(String basePath, String path) {
+    public static String getResourcePath(String resourceBasePath, String resourcePath) {
         // " File.separator + "indicates that the path is relative to the root url
-        return File.separator + "resource"+ File.separator +getRelativePath(basePath, path);
+        return File.separator + "resource"+ File.separator +getRelativePath(resourceBasePath, resourcePath);
     }
 
     public static void main(String[] args) {
