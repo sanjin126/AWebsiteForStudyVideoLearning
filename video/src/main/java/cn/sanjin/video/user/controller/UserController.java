@@ -20,20 +20,25 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("")
 public class UserController {
 
+    Logger log = Logger.getLogger(UserController.class.getName());
+
     @GetMapping("user/videolist/{navigator}")
     @CrossOrigin()
     @ResponseBody
     public List<Video> getVideoListBy(@PathVariable("navigator") String navigator) throws IOException {
+        log.info("入参：" + "navigator: " + navigator);
         String base_dirname = ResourceContext.navigator_2_base_dirname.get(navigator);
         if (base_dirname == null) {
             throw new RuntimeException("navigator not found");
         }
+        log.info("ResourceContext.RESOURCE_ABSOLUTE_PATH："+ResourceContext.RESOURCE_ABSOLUTE_PATH);
         Path videoAbsPath = Path.of(ResourceContext.RESOURCE_ABSOLUTE_PATH, base_dirname, ResourceContext.VIDEO_DIR_NAME);
 
         class RemoveSuffix {
