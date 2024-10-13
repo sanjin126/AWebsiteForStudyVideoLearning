@@ -1,5 +1,6 @@
 package cn.sanjin.video.user.config;
 
+import cn.sanjin.video.ResourceContext;
 import cn.sanjin.video.VideoApplication;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +35,8 @@ public class ResourceConfig implements WebMvcConfigurer {
          * https://stackoverflow.com/questions/21123437/how-do-i-use-spring-boot-to-serve-static-content-located-in-dropbox-folder
          */
         registry.addResourceHandler("/resource/**")
-                .addResourceLocations("file:"+ VideoApplication.resourceDir.toAbsolutePath()+File.separator)
+                .addResourceLocations("file:"+ VideoApplication.resourceDir.toAbsolutePath()+File.separator,
+                        "file:"+ ResourceContext.RESOURCE_ABSOLUTE_PATH+File.separator)
                 .resourceChain(true)
 //                .addResolver(new AbstractResourceResolver() {
 //                    @Override
