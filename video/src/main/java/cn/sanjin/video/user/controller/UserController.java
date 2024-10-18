@@ -48,12 +48,14 @@ public class UserController {
         }
 
         // 将video目录下的文件转为video list 返回
-        return Files
+        List<Video> videoList = Files
                 .list(videoAbsPath)
                 .map((video) -> new Video(RemoveSuffix.removeSuffix(video.getFileName().toString()),
                         PathUtils.getResourcePath(ResourceContext.RESOURCE_ABSOLUTE_PATH,
                                 video.toFile().getAbsolutePath())))
                 .collect(Collectors.toList());
+        videoList.sort(Video::compareTo);
+        return videoList;
     }
 
     @GetMapping()
